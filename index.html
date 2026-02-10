@@ -1,0 +1,391 @@
+<!-- index.html (UPDATED as you asked) -->
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome Friend 💐</title>
+
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#1b0b2a;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.12);
+      --txt: #f5f5f7;
+      --muted: rgba(245,245,247,.75);
+      --shadow: 0 20px 50px rgba(0,0,0,.45);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--txt);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 20%, rgba(255,106,162,.25), transparent 60%),
+        radial-gradient(900px 500px at 80% 30%, rgba(124,247,255,.18), transparent 60%),
+        radial-gradient(900px 700px at 50% 90%, rgba(255,255,255,.08), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+
+    .wrap{
+      width:min(980px, 92vw);
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      align-items:center;
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.05));
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:20px;
+      box-shadow: var(--shadow);
+      padding:22px;
+      backdrop-filter: blur(10px);
+    }
+
+    .title{
+      font-size: clamp(26px, 2.8vw, 34px);
+      font-weight:900;
+      letter-spacing:.2px;
+      margin:0;
+    }
+
+    .msg{
+      display:none;
+      margin-top:16px;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, var(--card2), rgba(255,255,255,.06));
+      line-height:1.65;
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+
+    .bad{
+      display:none;
+      margin-top:16px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,80,80,.35);
+      background: rgba(255,50,50,.08);
+      color:#ffd4d4;
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size: 16px;
+    }
+
+    .btnRow{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:900;
+      color:#0b1020;
+      background: linear-gradient(90deg, #ff6aa2, #7cf7ff);
+      box-shadow: 0 14px 30px rgba(0,0,0,.35);
+      transition: transform .15s ease, filter .15s ease, opacity .15s ease;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn[disabled]{
+      opacity:.45;
+      cursor:not-allowed;
+      filter: grayscale(25%);
+    }
+
+    /* ===== 3D Bouquet ===== */
+    .bouquetCard{
+      position:relative;
+      height: 440px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .stage{
+      width: 340px;
+      height: 340px;
+      position:relative;
+      transform-style: preserve-3d;
+      perspective: 900px;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .glow{
+      position:absolute;
+      inset:-60px;
+      background: radial-gradient(circle at 50% 60%, rgba(255,106,162,.26), transparent 60%),
+                  radial-gradient(circle at 40% 30%, rgba(124,247,255,.18), transparent 55%);
+      filter: blur(2px);
+      animation: floatGlow 5s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes floatGlow{
+      0%,100%{ transform: translateY(0px); }
+      50%{ transform: translateY(-10px); }
+    }
+
+    .bouquet{
+      position:absolute;
+      inset:0;
+      transform-style: preserve-3d;
+      transform: rotateX(18deg) rotateY(-18deg);
+      animation: slowSpin 8s ease-in-out infinite;
+    }
+    @keyframes slowSpin{
+      0%,100%{ transform: rotateX(18deg) rotateY(-18deg); }
+      50%{ transform: rotateX(14deg) rotateY(18deg); }
+    }
+
+    .flower{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width: 80px;
+      height: 80px;
+      transform-style: preserve-3d;
+      transform: translate(-50%,-50%);
+      transition: transform .9s cubic-bezier(.2,.9,.2,1), opacity .6s ease;
+      will-change: transform;
+    }
+
+    .petal{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width: 28px;
+      height: 44px;
+      transform-origin: 50% 90%;
+      border-radius: 20px 20px 24px 24px;
+      transform: translate(-50%,-50%) rotate(0deg) translateY(-18px);
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,.25));
+      opacity:.98;
+    }
+
+    .center{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      transform: translate(-50%,-50%) translateZ(12px);
+      background: radial-gradient(circle at 30% 30%, #fff6b1, #ffbf3a 60%, #c77200);
+      box-shadow: 0 10px 18px rgba(0,0,0,.25);
+    }
+
+    .stem{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width: 10px;
+      height: 110px;
+      transform: translate(-50%, 10px) translateZ(-8px);
+      border-radius: 10px;
+      background: linear-gradient(180deg, #1dd28a, #0c8a57);
+      box-shadow: 0 12px 16px rgba(0,0,0,.25);
+    }
+
+    .wrapPaper{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width: 160px;
+      height: 130px;
+      transform: translate(-50%, 70px) translateZ(-30px) rotateX(70deg);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      opacity:.9;
+    }
+
+    .stage.burst .bouquet{ animation: none; }
+
+    @media (max-width: 860px){
+      .wrap{ grid-template-columns: 1fr; }
+      .bouquetCard{ height: 390px; }
+      .stage{ width: 300px; height: 300px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- Left -->
+    <div class="card">
+      <h1 class="title">Welcome Friend 💖</h1>
+
+      <div id="goodMsg" class="msg"></div>
+      <div id="badMsg" class="bad">veliya poda THEEYASHAKTHI 😤</div>
+
+      <div class="btnRow">
+        <button id="nextBtn" class="btn" disabled>Next ➜</button>
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div class="card bouquetCard">
+      <div class="glow"></div>
+
+      <div id="stage" class="stage" title="Click the bouquet 💐">
+        <div class="bouquet" id="bouquet">
+          <div class="wrapPaper"></div>
+
+          <!-- 7 flowers -->
+          <div class="flower" data-i="0"></div>
+          <div class="flower" data-i="1"></div>
+          <div class="flower" data-i="2"></div>
+          <div class="flower" data-i="3"></div>
+          <div class="flower" data-i="4"></div>
+          <div class="flower" data-i="5"></div>
+          <div class="flower" data-i="6"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ALLOWED_NAME = "mohana priya";
+
+    const MESSAGE = `Hi inga MOHANA PRIYA 😊
+Neeinga than en best frd… ipo illa eppaiyume neinga than ennnaku always ah best life laiye.
+Na nala jolly ya pesurathu uingata than…
+En boy friends ta pesuratha vida na daily cut pannama center ku varthey uinga ta jolly ya pesalam nu than.
+Oru ponnuta comfortable ah na 1st ponnu neimnga than.
+Ennaikume na uinga kooda nipen.
+After marriage ennata pesama irukathinga…
+Na ennaikume uinga kooda nippen as a best friend ah 💛`;
+
+    const NEXT_PAGE = "page2.html"; // change if you want
+
+    const flowerEls = document.querySelectorAll(".flower");
+    const petalColors = [
+      ["#ff6aa2", "#ffb3d1"],
+      ["#7cf7ff", "#c8fdff"],
+      ["#b58cff", "#eddcff"],
+      ["#ffcf5a", "#fff1b5"],
+      ["#ff7d5c", "#ffd1c6"],
+      ["#45ff9d", "#caffea"],
+      ["#ff5fd7", "#ffd0f3"]
+    ];
+
+    function makePetals(flowerEl, c1, c2){
+      const petals = 8;
+      for(let p=0;p<petals;p++){
+        const pet = document.createElement("div");
+        pet.className = "petal";
+        const angle = (360/petals)*p;
+        pet.style.transform = `translate(-50%,-50%) rotate(${angle}deg) translateY(-22px) rotateX(18deg)`;
+        pet.style.background = `radial-gradient(circle at 30% 20%, ${c2}, ${c1} 55%, rgba(0,0,0,.08))`;
+        flowerEl.appendChild(pet);
+      }
+      const center = document.createElement("div");
+      center.className = "center";
+      flowerEl.appendChild(center);
+
+      const stem = document.createElement("div");
+      stem.className = "stem";
+      flowerEl.appendChild(stem);
+    }
+
+    flowerEls.forEach((el, idx)=>{
+      const [c1,c2] = petalColors[idx % petalColors.length];
+      makePetals(el, c1, c2);
+
+      // tight bouquet positions
+      const presets = [
+        {x:-40, y:-30, z: 30, s:1.00, r: -8},
+        {x: 10, y:-55, z: 50, s:1.05, r: 10},
+        {x: 45, y:-25, z: 35, s:0.98, r: 18},
+        {x:-10, y:-10, z: 70, s:1.10, r: -12},
+        {x:-55, y: 10, z: 25, s:0.96, r: -22},
+        {x: 55, y:  5, z: 20, s:0.96, r: 22},
+        {x:  0, y: 25, z: 10, s:0.92, r: 0},
+      ];
+      const pos = presets[idx];
+      el.style.transform =
+        `translate(-50%,-50%) translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) scale(${pos.s}) rotateZ(${pos.r}deg)`;
+    });
+
+    const stage = document.getElementById("stage");
+    const nextBtn = document.getElementById("nextBtn");
+    const goodMsg = document.getElementById("goodMsg");
+    const badMsg  = document.getElementById("badMsg");
+
+    let burstDone = false;
+    let gatePassed = false;
+
+    function normalizeName(s){
+      return (s || "").toLowerCase().replace(/\s+/g, " ").trim();
+    }
+
+    function burstFlowers(){
+      if(burstDone) return;
+      burstDone = true;
+      stage.classList.add("burst");
+
+      const fly = [
+        {x:-140, y:-120, z:120, s:1.0, r:-25},
+        {x:  0,  y:-150, z:160, s:1.05,r: 10},
+        {x: 150, y:-110, z:120, s:1.0, r: 25},
+        {x:-170, y:  10, z:140, s:1.05,r:-10},
+        {x: 170, y:  10, z:140, s:1.05,r: 10},
+        {x:-120, y: 140, z:110, s:1.0, r:-18},
+        {x: 120, y: 140, z:110, s:1.0, r: 18},
+      ];
+
+      flowerEls.forEach((el, idx)=>{
+        const p = fly[idx];
+        el.style.transform =
+          `translate(-50%,-50%) translate3d(${p.x}px, ${p.y}px, ${p.z}px) scale(${p.s}) rotateZ(${p.r}deg)`;
+      });
+    }
+
+    function askNameAndGate(){
+      const input = prompt("Name enter pannunga:");
+      const n = normalizeName(input);
+
+      if(n === normalizeName(ALLOWED_NAME)){
+        gatePassed = true;
+        badMsg.style.display = "none";
+        goodMsg.style.display = "block";
+        goodMsg.textContent = MESSAGE;
+        nextBtn.disabled = false;
+      }else{
+        gatePassed = false;
+        goodMsg.style.display = "none";
+        badMsg.style.display = "block";
+        nextBtn.disabled = true;
+      }
+    }
+
+    stage.addEventListener("click", ()=>{
+      burstFlowers();
+      setTimeout(askNameAndGate, 450);
+    });
+
+    nextBtn.addEventListener("click", ()=>{
+      if(!gatePassed) return;
+      window.location.href = NEXT_PAGE;
+    });
+  </script>
+</body>
+</html>
