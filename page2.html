@@ -1,0 +1,437 @@
+<!-- page2.html (FULL CODE) — updated TEMPLATE_ID to template_023yyoe + EmailJS send configured -->
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome Friend • Q&A 💖</title>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#1b0b2a;
+      --txt: #f5f5f7;
+      --muted: rgba(245,245,247,.75);
+      --accent: #ff6aa2;
+      --accent2:#7cf7ff;
+      --shadow: 0 20px 50px rgba(0,0,0,.45);
+      --paper: rgba(255,255,255,.10);
+      --paper2: rgba(255,255,255,.14);
+      --stroke: rgba(255,255,255,.18);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--txt);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 20%, rgba(255,106,162,.25), transparent 60%),
+        radial-gradient(900px 500px at 80% 30%, rgba(124,247,255,.18), transparent 60%),
+        radial-gradient(900px 700px at 50% 90%, rgba(255,255,255,.08), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+      padding: 18px;
+    }
+
+    .glow{
+      position:fixed;
+      inset:-80px;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,106,162,.20), transparent 55%),
+        radial-gradient(circle at 75% 30%, rgba(124,247,255,.14), transparent 58%),
+        radial-gradient(circle at 50% 85%, rgba(255,255,255,.08), transparent 60%);
+      filter: blur(2px);
+      animation: floatGlow 6s ease-in-out infinite;
+      z-index:0;
+    }
+    @keyframes floatGlow{
+      0%,100%{ transform: translateY(0px); }
+      50%{ transform: translateY(-10px); }
+    }
+
+    .wrap{ width:min(520px, 94vw); z-index:1; }
+
+    .paper{
+      background: linear-gradient(180deg, var(--paper2), var(--paper));
+      border:1px solid var(--stroke);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 16px 16px 14px;
+      overflow:hidden;
+    }
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .badge{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.08);
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size:13px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+
+    .title{
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing:.2px;
+    }
+
+    .qCard{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .question{
+      font-size: 16px;
+      font-weight: 850;
+      line-height: 1.4;
+      margin: 0 0 10px 0;
+    }
+
+    textarea{
+      width:100%;
+      height: 110px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      color: var(--txt);
+      padding: 12px;
+      font-size: 15px;
+      outline:none;
+      resize:none;
+    }
+    textarea::placeholder{ color: rgba(245,245,247,.65); }
+
+    .midLine{
+      margin: 10px 2px 6px;
+      text-align:center;
+      font-weight:800;
+      font-size: 13px;
+      color: rgba(245,245,247,.85);
+      opacity:.9;
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:4px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 900;
+      color: #0b1020;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      box-shadow: 0 14px 30px rgba(0,0,0,.35);
+      transition: transform .15s ease, opacity .15s ease;
+      min-width: 122px;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn[disabled]{ opacity:.55; cursor:not-allowed; }
+
+    .btnGhost{
+      background: rgba(255,255,255,.10);
+      color: var(--txt);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: none;
+    }
+
+    .toast{
+      margin-top:10px;
+      display:none;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(124,247,255,.28);
+      background: rgba(124,247,255,.10);
+      color: rgba(245,245,247,.92);
+      font-weight:800;
+      font-size: 13px;
+    }
+    .toast.err{
+      border:1px solid rgba(255,90,90,.35);
+      background: rgba(255,80,80,.10);
+    }
+
+    .rose{
+      position:fixed;
+      top:-40px;
+      font-size: 22px;
+      z-index:2;
+      pointer-events:none;
+      animation: fall linear forwards;
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,.35));
+    }
+    @keyframes fall{
+      to{ transform: translateY(110vh) rotate(260deg); opacity:0; }
+    }
+
+    .done{
+      text-align:center;
+      padding: 18px 12px 10px;
+    }
+    .done h2{
+      margin: 0 0 6px 0;
+      font-size: 22px;
+      font-weight: 950;
+    }
+    .done p{
+      margin: 0;
+      color: var(--muted);
+      line-height:1.5;
+      font-weight:700;
+      font-size: 13px;
+    }
+
+    @media (max-width: 380px){
+      .title{ font-size: 18px; }
+      textarea{ height: 104px; }
+      .btn{ min-width: 110px; padding: 11px 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow"></div>
+
+  <div class="wrap">
+    <div class="paper">
+      <div class="topRow">
+        <div class="badge" id="progress">1 / 9</div>
+        <div class="badge" id="saveHint">Auto-save ✓</div>
+      </div>
+
+      <div id="main">
+        <h1 class="title">Welcome Friend 💖</h1>
+
+        <div class="qCard">
+          <p class="question" id="qText"></p>
+          <textarea id="ans" placeholder="Type your answer here..."></textarea>
+
+          <div class="midLine">Summa uingalukaga panna 💖</div>
+
+          <div class="controls">
+            <button class="btn btnGhost" id="backBtn" type="button">⬅ Back</button>
+            <button class="btn" id="nextBtn" type="button">Next ❤️</button>
+          </div>
+
+          <div class="toast" id="toast"></div>
+        </div>
+      </div>
+
+      <div id="done" class="done" style="display:none;">
+        <h2>💖 Thank you!</h2>
+        <p>Answers mail send aagiduchu ✅</p>
+        <div style="margin-top:12px;">
+          <button class="btn" id="goNext" type="button">Continue ➜</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       EMAILJS CONFIG (Your IDs)
+       ========================= */
+    const SERVICE_ID  = "service_po2m9r8";
+    const TEMPLATE_ID = "template_023yyoe";   // ✅ UPDATED
+    const PUBLIC_KEY  = "fOTvZeRNjEewlDGuQ";
+
+    // ✅ Your email (Receiver)
+    const TO_EMAIL = "nfgmithun@gmail.com"; // change if needed
+
+    /* =========================
+       QUESTIONS
+       ========================= */
+    const questions = [
+      "Naan uning life la epdi oru friend?",
+      "Namma rendu perum pona best memory edhu nu soluinga ?",
+      "En kitta nee comfortable ah feel pannringala?",
+      "Namma first meet nyabagam iruka? 😊",
+      "Honestly solluinga… naan uningaluku nalla friend ah irukkena?",
+      "Namma first time pesina moment nyabagam varuingala?",
+      "Namma rendu perum sirichitu irundha best moment edhu nu unagaluku thonudhu?",
+      "En kooda pesumbodhu free and happy ah feel pannuvinga la?",
+      "Uingaluku edhavathu sollanuma enta ??"
+    ];
+
+    /* =========================
+       STATE + AUTOSAVE
+       ========================= */
+    const LS_KEY = "page2_qna_v1";
+    let state = { idx: 0, answers: Array(questions.length).fill("") };
+
+    const qText = document.getElementById("qText");
+    const ans = document.getElementById("ans");
+    const progress = document.getElementById("progress");
+    const backBtn = document.getElementById("backBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const toast = document.getElementById("toast");
+    const main = document.getElementById("main");
+    const done = document.getElementById("done");
+    const goNext = document.getElementById("goNext");
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        if(!raw) return;
+        const parsed = JSON.parse(raw);
+        if(parsed && Array.isArray(parsed.answers) && typeof parsed.idx === "number"){
+          state.idx = Math.max(0, Math.min(questions.length-1, parsed.idx));
+          state.answers = parsed.answers.slice(0, questions.length);
+          while(state.answers.length < questions.length) state.answers.push("");
+        }
+      }catch(e){}
+    }
+
+    function saveState(){
+      try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){}
+    }
+
+    function render(){
+      qText.textContent = questions[state.idx];
+      ans.value = state.answers[state.idx] || "";
+      progress.textContent = `${state.idx + 1} / ${questions.length}`;
+      backBtn.style.opacity = state.idx === 0 ? "0.45" : "1";
+      backBtn.style.pointerEvents = state.idx === 0 ? "none" : "auto";
+      nextBtn.textContent = (state.idx === questions.length-1) ? "Finish ✅" : "Next ❤️";
+    }
+
+    ans.addEventListener("input", ()=>{
+      state.answers[state.idx] = ans.value;
+      saveState();
+    });
+
+    /* =========================
+       ROSE RAIN
+       ========================= */
+    function roseRain(){
+      for(let i=0;i<14;i++){
+        const r = document.createElement("div");
+        r.className = "rose";
+        r.textContent = "🌹";
+        r.style.left = Math.random()*100 + "vw";
+        r.style.animationDuration = (Math.random()*1.7 + 2.0) + "s";
+        r.style.fontSize = (Math.random()*10 + 18) + "px";
+        document.body.appendChild(r);
+        setTimeout(()=>r.remove(), 4200);
+      }
+    }
+
+    /* =========================
+       TOAST
+       ========================= */
+    function showToast(msg, isErr=false){
+      toast.textContent = msg;
+      toast.classList.toggle("err", !!isErr);
+      toast.style.display = "block";
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(()=>toast.style.display="none", 2600);
+    }
+
+    /* =========================
+       EMAIL SEND (robust)
+       ========================= */
+    function buildMessage(){
+      const lines = [];
+      for(let i=0;i<questions.length;i++){
+        const a = (state.answers[i] || "").trim();
+        lines.push(`${i+1}) ${questions[i]}\nAns: ${a || "(no answer)"}\n`);
+      }
+      return lines.join("\n");
+    }
+
+    async function sendMail(){
+      // Init EmailJS
+      emailjs.init(PUBLIC_KEY);
+
+      // ✅ Make sure your template has these variables:
+      // {{to_email}} {{from_name}} {{subject}} {{message}}
+      const params = {
+        to_email: TO_EMAIL,
+        from_name: "Welcome Friend - Page2",
+        subject: "Friendship Q&A Answers (Page 2)",
+        message: buildMessage()
+      };
+
+      return emailjs.send(SERVICE_ID, TEMPLATE_ID, params);
+    }
+
+    /* =========================
+       NAV
+       ========================= */
+    backBtn.addEventListener("click", ()=>{
+      roseRain();
+      state.answers[state.idx] = ans.value;
+      if(state.idx > 0) state.idx--;
+      saveState();
+      render();
+    });
+
+    nextBtn.addEventListener("click", async ()=>{
+      roseRain();
+      state.answers[state.idx] = ans.value;
+      saveState();
+
+      // Last question -> send mail
+      if(state.idx === questions.length - 1){
+        nextBtn.disabled = true;
+        showToast("Sending mail... 📩");
+
+        try{
+          await sendMail();
+          showToast("Mail sent ✅");
+          main.style.display = "none";
+          done.style.display = "block";
+        }catch(err){
+          console.log("EmailJS error:", err);
+          showToast("Mail send fail ❌ Template variables check pannunga.", true);
+          nextBtn.disabled = false;
+        }
+        return;
+      }
+
+      // Next question
+      state.idx++;
+      saveState();
+      render();
+    });
+
+    goNext.addEventListener("click", ()=>{
+      window.location.href = "page3.html"; // change if needed
+    });
+
+    loadState();
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!-- page3.html (FULL CODE) — kavithai + “-By Yogesh (Son of Stalin)” + dark theme + “WEBSITE over • Review to Yogesh” -->
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Uingalukaga Oru Kavithai 💖</title>
+
+  <style>
+    :root{
+      --bg1:#070b16;
+      --bg2:#15091f;
+      --bg3:#04141a;
+      --txt:#f5f5f7;
+      --muted:rgba(245,245,247,.72);
+      --accent:#ff6aa2;
+      --accent2:#7cf7ff;
+      --shadow: 0 24px 70px rgba(0,0,0,.55);
+      --stroke: rgba(255,255,255,.16);
+      --glass1: rgba(255,255,255,.12);
+      --glass2: rgba(255,255,255,.06);
+      --chip: rgba(255,255,255,.08);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(1100px 600px at 18% 18%, rgba(255,106,162,.18), transparent 60%),
+        radial-gradient(900px 520px at 82% 24%, rgba(124,247,255,.12), transparent 60%),
+        radial-gradient(900px 700px at 52% 92%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+      overflow:hidden;
+      padding:18px;
+    }
+
+    .glow{
+      position:fixed;
+      inset:-90px;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 28% 25%, rgba(255,106,162,.16), transparent 55%),
+        radial-gradient(circle at 76% 30%, rgba(124,247,255,.10), transparent 58%),
+        radial-gradient(circle at 50% 86%, rgba(255,255,255,.06), transparent 60%);
+      filter: blur(2px);
+      animation: floatGlow 6s ease-in-out infinite;
+      z-index:0;
+    }
+    @keyframes floatGlow{
+      0%,100%{ transform: translateY(0px); }
+      50%{ transform: translateY(-10px); }
+    }
+
+    .wrap{
+      width:min(620px, 94vw);
+      z-index:1;
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--glass1), var(--glass2));
+      border:1px solid var(--stroke);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding: 18px 18px 14px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+
+    .chip{
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: var(--chip);
+      font-weight:900;
+      font-size:12px;
+      color: rgba(245,245,247,.78);
+      letter-spacing:.2px;
+      white-space:nowrap;
+    }
+
+    .title{
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      font-weight: 950;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .poemBox{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      border-radius: 18px;
+      padding: 14px;
+      line-height: 1.75;
+      font-size: 15.5px;
+      white-space: pre-wrap;
+    }
+
+    .byline{
+      margin-top:10px;
+      text-align:right;
+      font-weight:900;
+      font-size: 13px;
+      color: rgba(245,245,247,.78);
+    }
+
+    .btnRow{
+      margin-top: 14px;
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 950;
+      color: #070b16;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      box-shadow: 0 14px 30px rgba(0,0,0,.35);
+      transition: transform .15s ease, opacity .15s ease;
+      min-width: 130px;
+    }
+    .btn:active{ transform: scale(.98); }
+
+    .btnGhost{
+      background: rgba(255,255,255,.10);
+      color: var(--txt);
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:none;
+      min-width: 110px;
+    }
+
+    /* ===== Modal ===== */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:10;
+    }
+    .overlay.show{ display:flex; }
+
+    .modal{
+      width:min(540px, 96vw);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 26px 80px rgba(0,0,0,.65);
+      backdrop-filter: blur(14px);
+      padding: 16px;
+      position:relative;
+      overflow:hidden;
+      transform: translateY(10px);
+      animation: pop .18s ease-out forwards;
+    }
+    @keyframes pop{ to{ transform: translateY(0px); } }
+
+    .modalTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .modalTitle{
+      font-weight: 950;
+      font-size: 16px;
+      margin:0;
+    }
+    .closeX{
+      width:38px; height:38px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: var(--txt);
+      cursor:pointer;
+      font-weight: 950;
+    }
+
+    .modalBody{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      border-radius: 18px;
+      padding: 12px;
+      line-height: 1.6;
+      color: rgba(245,245,247,.92);
+      font-weight: 780;
+      font-size: 14px;
+    }
+
+    .modalBtns{
+      margin-top: 12px;
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    .qrWrap{
+      margin-top:12px;
+      display:none;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.07);
+      border-radius: 18px;
+      padding: 10px;
+      text-align:center;
+    }
+    .qrWrap.show{ display:block; }
+
+    .qrImg{
+      width: min(360px, 100%);
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      display:block;
+      margin: 0 auto;
+    }
+
+    .smallHint{
+      margin-top:8px;
+      text-align:center;
+      font-size: 12px;
+      color: rgba(245,245,247,.72);
+      font-weight: 800;
+    }
+
+    .funNote{
+      margin-top:10px;
+      text-align:center;
+      font-size: 13px;
+      color: rgba(245,245,247,.78);
+      font-weight: 900;
+    }
+
+    /* footer text */
+    .footer{
+      margin-top: 12px;
+      text-align:center;
+      color: rgba(245,245,247,.60);
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing:.3px;
+    }
+
+    @media (max-width: 380px){
+      .title{ font-size: 18px; }
+      .poemBox{ font-size: 15px; }
+      .btn{ min-width: 120px; padding: 11px 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow"></div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="topRow">
+        <div class="chip">WEBSITE over</div>
+        <div class="chip">Review to Yogesh</div>
+      </div>
+
+      <div class="title">Uingalukaga Oru Kavithai 💖</div>
+
+      <div class="poemBox">
+Ennai verupavargalai nesikkum naan…
+Naan nesitha uingalaiye eppadi veruppen? 💛
+      </div>
+
+      <div class="byline">-By Yogesh (Son of Stalin)</div>
+
+      <div class="btnRow">
+        <button class="btn" id="donateBtn" type="button">DONATE</button>
+      </div>
+
+      <div class="footer">Summa fun 😆</div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Donate popup">
+      <div class="modalTop">
+        <p class="modalTitle">Summa fun 😄</p>
+        <button class="closeX" id="closeBtn" type="button">✕</button>
+      </div>
+
+      <div class="modalBody">
+        Akka mudunja oru donate panuinga…<br>
+        idha naaai free ya panna sollitan 🙂
+      </div>
+
+      <div class="modalBtns">
+        <button class="btn" id="gpayBtn" type="button">GPay</button>
+        <button class="btn btnGhost" id="closeBtn2" type="button">Close</button>
+      </div>
+
+      <!-- QR image area -->
+      <div class="qrWrap" id="qrWrap">
+        <!-- Save your QR image in repo as "gpay-qr.png" -->
+        <img class="qrImg" src="gpay-qr.png" alt="GPay QR / UPI QR">
+        <div class="smallHint">UPI ID: nfgmithun@okaxis</div>
+      </div>
+
+      <div class="funNote">Summa fun 😆 donate lam pannathinga</div>
+    </div>
+  </div>
+
+  <script>
+    const overlay  = document.getElementById("overlay");
+    const donateBtn= document.getElementById("donateBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const closeBtn2= document.getElementById("closeBtn2");
+    const gpayBtn  = document.getElementById("gpayBtn");
+    const qrWrap   = document.getElementById("qrWrap");
+
+    function openModal(){
+      overlay.classList.add("show");
+      overlay.setAttribute("aria-hidden", "false");
+    }
+    function closeModal(){
+      overlay.classList.remove("show");
+      overlay.setAttribute("aria-hidden", "true");
+      qrWrap.classList.remove("show");
+    }
+
+    donateBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+    closeBtn2.addEventListener("click", closeModal);
+
+    overlay.addEventListener("click", (e)=>{
+      if(e.target === overlay) closeModal();
+    });
+
+    document.addEventListener("keydown", (e)=>{
+      if(e.key === "Escape") closeModal();
+    });
+
+    gpayBtn.addEventListener("click", ()=>{
+      qrWrap.classList.toggle("show");
+    });
+  </script>
+</body>
+</html>
